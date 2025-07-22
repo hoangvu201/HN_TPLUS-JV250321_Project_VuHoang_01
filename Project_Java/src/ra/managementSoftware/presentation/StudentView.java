@@ -2,6 +2,7 @@ package ra.managementSoftware.presentation;
 
 import ra.managementSoftware.business.IStudentService;
 import ra.managementSoftware.business.impl.StudentServiceImpl;
+import ra.managementSoftware.validation.Validator;
 
 import java.util.Scanner;
 
@@ -11,6 +12,28 @@ public class StudentView {
     public StudentView() {
         studentService = new StudentServiceImpl();
     }
+
+    public boolean loginByStudent(Scanner scanner) {
+        do {
+            System.out.println("===== ĐĂNG NHẬP HỌC VIÊN =====");
+            System.out.println("Nhập email đăng nhập: ");
+            String email = scanner.nextLine();
+            System.out.println("Nhập mật khẩu: ");
+            String password = scanner.nextLine();
+
+            if (!Validator.isEmpty(email) && !Validator.isEmpty(password)) {
+                boolean success = studentService.checkLoginStudent(email, password);
+                if (success) {
+                    System.out.println("Đăng nhập thành công!");
+                    return true;
+                } else {
+                    System.err.println("Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.");
+                }
+            } else {
+                System.err.println("Tên đăng nhập và mật khẩu không được để trống");
+            }
+        }while (true);
+    };
 
     public void displayStudentMenu(Scanner scanner) {
         boolean isExits = true;

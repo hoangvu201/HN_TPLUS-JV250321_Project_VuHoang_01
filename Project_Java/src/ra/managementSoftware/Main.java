@@ -1,21 +1,27 @@
 package ra.managementSoftware;
 
 import ra.managementSoftware.business.IAdminService;
+import ra.managementSoftware.business.IStudentService;
 import ra.managementSoftware.business.impl.AdminServiceImpl;
+import ra.managementSoftware.business.impl.StudentServiceImpl;
 import ra.managementSoftware.presentation.AdminView;
+import ra.managementSoftware.presentation.StudentView;
 import ra.managementSoftware.validation.Validator;
 
 import java.util.Scanner;
 
 public class Main {
     private final IAdminService adminService;
+    private final IStudentService studentService;
 
     public Main() {
         adminService = new AdminServiceImpl();
+        studentService = new StudentServiceImpl();
     }
 
     public static void main(String[] args) {
         AdminView adminView = new AdminView();
+        StudentView studentView = new StudentView();
         Scanner scanner = new Scanner(System.in);
         do {
             System.out.println("=========HỆ THỐNG QUẢN LÝ ĐÀO TẠO===========");
@@ -32,6 +38,9 @@ public class Main {
                     }
                     break;
                 case 2:
+                    if (studentView.loginByStudent(scanner)) {
+                        studentView.displayStudentMenu(scanner);
+                    }
                     break;
                 case 3:
                     System.exit(0);

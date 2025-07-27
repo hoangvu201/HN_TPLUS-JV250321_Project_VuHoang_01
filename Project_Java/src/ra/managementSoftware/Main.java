@@ -13,10 +13,12 @@ import java.util.Scanner;
 public class Main {
     private final IAdminService adminService;
     private final IStudentService studentService;
+    private final StudentView studentView ;
 
     public Main() {
         adminService = new AdminServiceImpl();
         studentService = new StudentServiceImpl();
+        studentView = new StudentView();
     }
 
     public static void main(String[] args) {
@@ -34,12 +36,13 @@ public class Main {
             switch (choice) {
                 case 1:
                     if(adminView.loginByAdmin(scanner)) {
-                        AdminView.menuAdmin(scanner);
+                        adminView.menuAdmin(scanner);
                     }
                     break;
                 case 2:
-                    if (studentView.loginByStudent(scanner)) {
-                        studentView.displayStudentMenu(scanner);
+                    int studentId = studentView.loginByStudent(scanner);
+                    if (studentId > 0){
+                        studentView.displayStudentMenu(scanner, studentId);
                     }
                     break;
                 case 3:
@@ -47,4 +50,6 @@ public class Main {
             }
         } while (true);
     }
+
+
 }

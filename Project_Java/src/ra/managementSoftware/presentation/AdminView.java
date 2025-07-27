@@ -7,31 +7,60 @@ import ra.managementSoftware.validation.Validator;
 import java.util.Scanner;
 
 public class AdminView {
-    private final IAdminService adminService = new AdminServiceImpl();
+    private final IAdminService adminService ;
+    private final CourseView courseView ;
+    private final StudentView studentView ;
+    private final EnrollmentView enrollmentView ;
+    private final StatisticView statisticView ;
+
+    public AdminView() {
+        adminService = new AdminServiceImpl();
+        courseView = new CourseView();
+        studentView = new StudentView();
+        enrollmentView = new EnrollmentView();
+        statisticView = new StatisticView();
+    }
 
     public boolean loginByAdmin(Scanner scanner) {
         do {
-            System.out.println("===== ĐĂNG NHẬP ADMIN =====");
-            System.out.println("Nhập tên đăng nhập: ");
-            String username = scanner.nextLine();
-            System.out.println("Nhập mật khẩu: ");
-            String password = scanner.nextLine();
+            System.out.println("============= ĐĂNG NHẬP ADMIN ==========");
+            String username ;
+            String password ;
 
-            if (!Validator.isEmpty(username) && !Validator.isEmpty(password)) {
-                boolean success = adminService.checkLoginAdmin(username, password);
-                if (success) {
-                    System.out.println("Đăng nhập thành công!");
-                    return true;
+            boolean validUsername = false;
+            do {
+                System.out.println("Nhập tên đăng nhập: ");
+                username = scanner.nextLine();
+                if (Validator.isEmpty(username)) {
+                    System.err.println("Tên đăng nhập không được để trống");
                 } else {
-                    System.err.println("Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.");
+                    validUsername = true;
                 }
-            } else {
-                System.err.println("Tên đăng nhập và mật khẩu không được để trống");
-            }
-        }while (true);
-    };
+            } while (!validUsername);
 
-    public static void menuAdmin(Scanner scanner) {
+            boolean validPassword = false;
+            do {
+                System.out.println("Nhập mật khẩu: ");
+                password = scanner.nextLine();
+                if (Validator.isEmpty(password)) {
+                    System.err.println("Mật khẩu không được để trống");
+                } else {
+                    validPassword = true;
+                }
+            } while (!validPassword);
+
+            boolean success = adminService.checkLoginAdmin(username, password);
+            if (success) {
+                System.out.println("Đăng nhập thành công!");
+                return true;
+            } else {
+                System.err.println("Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.\n");
+            }
+        } while (true);
+    }
+
+
+    public void menuAdmin(Scanner scanner) {
         boolean exit = false;
         do {
             System.out.println("============ MENU ADMIN ============");
@@ -45,12 +74,16 @@ public class AdminView {
             int choice = Validator.validateMenuChoice(scanner,1,5);
             switch (choice) {
                 case 1:
+                    courseView.menuCourse(scanner);
                     break;
                 case 2:
+                    studentView.studentManagerMenu(scanner);
                     break;
                 case 3:
+                    enrollmentView.enrollmentMenu(scanner);
                     break;
                 case 4:
+                    statisticView.menuStatisticView(scanner);
                     break;
                 case 5:
                     exit = true;
